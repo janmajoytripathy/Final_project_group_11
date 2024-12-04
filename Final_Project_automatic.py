@@ -243,6 +243,6 @@ stock_metrics, top_stocks = perform_regression ( data )
 print("\nTop 5 Stocks by Regression (CSV Contents):")
 print(top_stocks)
 
-
+# Set the app to run
 if __name__ == "__main__":
     app.run_server ( debug=True )
