@@ -1,3 +1,5 @@
+
+# Importing all the necessary library
 import requests
 import pandas as pd
 from datetime import datetime, timedelta
@@ -10,6 +12,16 @@ import statsmodels.api as sm
 
 # Function to fetch stock prices for the last 60 days
 def fetch_last_60_days_prices(api_key, symbols):
+    """
+       Fetch stock price data for the last 60 days using the MarketStack API.
+
+       Args:
+           api_key (str): API key for MarketStack.
+           symbols (list): List of stock symbols to fetch data for.
+
+       Returns:
+           DataFrame: Combined DataFrame of all stock data fetched.
+       """
     today = datetime.today ()
     start_date = today - timedelta ( days=60 )
     date_to = today.strftime ( '%Y-%m-%d' )
@@ -40,7 +52,7 @@ def fetch_last_60_days_prices(api_key, symbols):
                 print ( f"Error fetching data for {symbol}: {response.status_code}" )
         except Exception as e:
             print ( f"Exception occurred while fetching data for {symbol}: {e}" )
-        time.sleep ( 2 )  # To avoid hitting API rate limits
+        time.sleep ( 2 )  # To avoid hitting API rate limits, the code will API every 2 seconds
 
     if all_data:
         non_empty_data = [df for df in all_data if not df.empty]
@@ -55,6 +67,15 @@ def fetch_last_60_days_prices(api_key, symbols):
 
 # Function to analyze stock data and recommend the top 5 stocks
 def analyze_and_recommend(data):
+    """
+       Analyze stock data and identify the top 5 performing stocks.
+
+       Args:
+           data (DataFrame): DataFrame containing stock data.
+
+       Returns:
+           Tuple: DataFrame with performance metrics and DataFrame of top 5 stocks.
+       """
     if data.empty:
         print ( "No data available for analysis." )
         return pd.DataFrame (), pd.DataFrame ()
@@ -81,6 +102,15 @@ def analyze_and_recommend(data):
 
 # Function to perform regression analysis
 def perform_regression(data):
+    """
+        Perform regression analysis on stock data to evaluate performance metrics.
+
+        Args:
+            data (DataFrame): DataFrame containing stock data.
+
+        Returns:
+            Tuple: DataFrame with regression metrics and DataFrame of top 5 stocks by regression score.
+        """
     stock_data_cleaned = data.dropna ()
     stock_symbols = stock_data_cleaned['symbol'].unique ()
     stock_metrics = pd.DataFrame ()
@@ -174,6 +204,15 @@ app.layout = html.Div ( [
     [Input ( 'symbol-dropdown', 'value' )]
 )
 def update_dashboard(selected_symbol):
+    """
+    Update dashboard charts and statistics based on the selected stock symbol.
+
+    Args:
+        selected_symbol (str): Selected stock symbol from the dropdown.
+
+    Returns:
+        Tuple: Updated line chart, bar chart, histogram, and descriptive stats.
+    """
     filtered_data = data[data['symbol'] == selected_symbol]
 
     line_chart_fig = px.line ( filtered_data, x='date', y='adj_close',
@@ -193,7 +232,17 @@ def update_dashboard(selected_symbol):
 
 # Analyze data and generate files
 performance, top_5_stocks = analyze_and_recommend ( data )
+
+# Print the contents of top_5_recommendations.csv
+print("\nTop 5 Recommendations (CSV Contents):")
+print(top_5_stocks)
+
 stock_metrics, top_stocks = perform_regression ( data )
+
+# Print the contents of top_5_stocks_regression.csv
+print("\nTop 5 Stocks by Regression (CSV Contents):")
+print(top_stocks)
+
 
 if __name__ == "__main__":
     app.run_server ( debug=True )
