@@ -159,7 +159,7 @@ app = dash.Dash ( __name__ )
 app.title = "Stock Analysis Dashboard"
 
 # API key and stock symbols
-API_KEY = "f5d84e530e2a3d3397ab7608d49619da"
+API_KEY = "7609cb6ab8dd88af14f443591bbda83f"
 SYMBOLS = [
     "NKE", "AAPL", "AMZN", "AXP", "BA", "CSCO", "IBM", "JPM", "MSFT",
     "V", "MA", "NVDA", "TSLA", "VZ", "NFLX", "CRM", "PG", "UNH", "WMT", "GS", "DJI.INDX"
@@ -266,7 +266,6 @@ performance, top_5_stocks = analyze_and_recommend ( data )
 print("\nTop 5 Recommendations (CSV Contents):")
 print(top_5_stocks)
 
-# Analyze data and generate files
 stock_metrics, top_stocks = perform_regression ( data )
 
 # Print the contents of top_5_stocks_regression.csv
